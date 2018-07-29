@@ -3,6 +3,15 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 Below you will find some information on how to perform common tasks.<br>
 You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
+* Simple reactjs app that consumes 'http://restcountries.eu/' API for fetching countries:
+ - User selects a specific country from the dropdown list and gets the coyntry object.
+ - User writes down a comma separated string on the search box, and get the objects of the
+   countries that they match. e.g.  mal,lon,gr  => returns countries that match these 3 words.
+
+ ![Select country from list](readme_staff/select_from_combo.gif)
+
+ ![Add a comma separated string](readme_staff/search_by_name.gif)
+
 ## Table of Contents
 
 - [Updating to New Releases](#updating-to-new-releases)
