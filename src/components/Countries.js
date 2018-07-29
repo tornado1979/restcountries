@@ -5,16 +5,19 @@ import { DropBox } from './dropBox'
 import { Search } from './search'
 import { Details } from './details'
 
-const ALL_COUNTRIES_API = 'https://restcountries.eu/rest/v2/all'
-const SEARCH_BY_NAME_API = 'https://restcountries.eu/rest/v2/name/'
+const END_POINTS = {
+   ALL_COUNTRIES_API: 'https://restcountries.eu/rest/v2/all',
+   SEARCH_BY_NAME_API: 'https://restcountries.eu/rest/v2/name/',
+}
 
 class Countries extends Component {
   state = {
     countries: [],
+    names: [],
   }
 
-  async getData(country) {
-    const response = await axios.get(`${SEARCH_BY_NAME_API}${country}`,
+  async getData(END_POINT) {
+    const response = await axios.get(END_POINT,
     {
       header:
         {'Content-Type': 'application/json'}
@@ -23,9 +26,9 @@ class Countries extends Component {
   }
 
   handleChange = (ev) => {
-    console.log(ev.target.value)
     const selectedCountry = ev.target.value
-    const response = this.getData(selectedCountry)
+
+    const response = this.getData(`${END_POINTS.SEARCH_BY_NAME_API}${selectedCountry}`)
 
     response
     .then(countries => (
@@ -46,30 +49,18 @@ class Countries extends Component {
 
   // return n countries
   getCountriesByNumber(n) {
-    console.log('state is', this.state)
     return this.state.countries.slice(0,10)
   }
 
-  async initCountriesState() {
-
-    const response = await axios.get('https://restcountries.eu/rest/v2/all',
-    {
-      header:
-        {'Content-Type': 'application/json'}
-      })
-
-    return response.data
-  }
-
   componentDidMount() {
-    var initPromise = this.initCountriesState()
+    var initPromise = this.getData(END_POINTS.ALL_COUNTRIES_API)
 
     let names
     initPromise
     .then(countries => (
-      names = countries.map(country => country.name),
+      names = countries.data.map(country => country.name),
       this.setState((prevState, props) => ({
-        countries,
+        countries: countries.data,
         names,
       }))
     ))
