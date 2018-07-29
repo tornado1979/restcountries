@@ -5,18 +5,35 @@ import { DropBox } from './dropBox'
 import { Search } from './search'
 import { Details } from './details'
 
+const ALL_COUNTRIES_API = 'https://restcountries.eu/rest/v2/all'
+const SEARCH_BY_NAME_API = 'https://restcountries.eu/rest/v2/name/'
+
 class Countries extends Component {
   state = {
     countries: [],
   }
 
-  handleChange = async () => {
-    const response = await axios.get('https://restcountries.eu/rest/v2/name/Greece',
+  async getData(country) {
+    const response = await axios.get(`${SEARCH_BY_NAME_API}${country}`,
     {
       header:
         {'Content-Type': 'application/json'}
       })
-    return response.data
+    return response
+  }
+
+  handleChange = (ev) => {
+    console.log(ev.target.value)
+    const selectedCountry = ev.target.value
+    const response = this.getData(selectedCountry)
+
+    response
+    .then(countries => (
+      this.setState((prevState, props) => ({
+        countries: countries.data,
+      }))
+    ))
+
   }
 
   // get Names from countries and update state
@@ -29,7 +46,8 @@ class Countries extends Component {
 
   // return n countries
   getCountriesByNumber(n) {
-    return this.state.countries.slice(1,10)
+    console.log('state is', this.state)
+    return this.state.countries.slice(0,10)
   }
 
   async initCountriesState() {
